@@ -1,10 +1,16 @@
 gulp = require 'gulp'
+gutil = require 'gulp-util'
+source = require 'vinyl-source-stream'
+browserify = require 'browserify'
 sourcemaps = require 'gulp-sourcemaps'
 coffee = require 'gulp-coffee'
-gutil = require 'gulp-util'
+
 # babel = require 'gulp-babel'
 concat = require 'gulp-concat'
 
+
+gulp.task 'js', ->
+	brwoserify 'src/coffee'
 
 
 gulp.task 'default', ->
