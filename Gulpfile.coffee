@@ -4,13 +4,15 @@ source = require 'vinyl-source-stream'
 browserify = require 'browserify'
 sourcemaps = require 'gulp-sourcemaps'
 coffee = require 'gulp-coffee'
+deamdify = require 'deamdify'
+
 
 # babel = require 'gulp-babel'
 concat = require 'gulp-concat'
 
 
 gulp.task 'js', ->
-	brwoserify 'src/coffee'
+	browserify 'src/coffee'
 
 
 gulp.task 'default', ->
