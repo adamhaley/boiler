@@ -2,7 +2,7 @@ gulp = require 'gulp'
 browserSync = require 'browser-sync'
 reload = browserSync.reload
 
-rjs = require('gulp-rjs')
+rjs = require('gulp-requirejs')
 gutil = require 'gulp-util'
 source = require 'vinyl-source-stream'
 del = require 'del'
@@ -17,15 +17,40 @@ concat = require 'gulp-concat'
 gulp.task 'clean', ->
 	del ['dist/*']
 
-gulp.task 'rjs', ['clean'], ->
 
-	gulp.src('src/library/**/*.js')
+gulp.task 'rjs',  ['clean'], ->
+
+
+	shim = 
+		include: [ 'main' ]
+		mainConfigFile: 'main.js'
+		out: '../build-main.js'
+		jquery: '../library/js/libs/jquery-min'
+		underscore: '../library/js/libs/underscore-min'
+		backbone: '../library/js/libs/backbone-min'
+		text: '../library/js/libs/text'
+		famous: '../library/js/libs/famous/src'
+		platform: '../library/js'
+		platformLib: '../library/js/main-dev'
+		platformTemplate: '../library'
+		templates: '../templates'
+		staticPath: './'	
+  	rjs(
+	    baseUrl: './src/library/platform.js'
+	    out: 'library.min.js'
+	    shim: ).pipe gulp.dest('./dist/')
+  # pipe it to the output DIR 
+
+# gulp.task 'rjs', ['clean'], ->
+
+# 	gulp.src('src/library/**/*.js')
 		
-		.pipe rjs(baseUrl: './src/library')
-		.pipe gulp.dest('./dist/library')
+# 		.pipe rjs(baseUrl: './src/library/platform.js')
+# 		.pipe gulp.dest('./dist/')
 
 
 gulp.task 'compile-js', ['clean'], ->
+
 	gulp.src('src/**/*.coffee')
 		.pipe(sourcemaps.init())
 		.pipe(coffee({bare: true}).on('error', gutil.log))
@@ -34,6 +59,7 @@ gulp.task 'compile-js', ['clean'], ->
 		.pipe(gulp.dest('dist/'))
 
 gulp.task 'serve', ['rjs','compile-js'], ->
+
   browserSync server: baseDir: 'dist'
   gulp.watch [
     '*.html'
