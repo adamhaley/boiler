@@ -2,10 +2,11 @@ gulp = require 'gulp'
 browserSync = require 'browser-sync'
 reload = browserSync.reload
 
-rjs = require('gulp-requirejs')
+rjs = require 'gulp-requirejs'
 gutil = require 'gulp-util'
 source = require 'vinyl-source-stream'
 del = require 'del'
+watch = require 'gulp-watch'
 # deamdify = require 'deamdify'
 # browserify = require 'browserify'
 sourcemaps = require 'gulp-sourcemaps'
@@ -19,7 +20,6 @@ gulp.task 'clean', ->
 
 
 gulp.task 'rjs',  ['clean'], ->
-
 
 	shim = 
 		include: [ 'main' ]
@@ -35,18 +35,14 @@ gulp.task 'rjs',  ['clean'], ->
 		platformTemplate: '../library'
 		templates: '../templates'
 		staticPath: './'	
-  	rjs(
-	    baseUrl: './src/library/platform.js'
-	    out: 'library.min.js'
-	    shim: ).pipe gulp.dest('./dist/')
-  # pipe it to the output DIR 
 
-# gulp.task 'rjs', ['clean'], ->
-
-# 	gulp.src('src/library/**/*.js')
-		
-# 		.pipe rjs(baseUrl: './src/library/platform.js')
-# 		.pipe gulp.dest('./dist/')
+	rjs(
+		baseUrl: 'src/library/platform.js'
+		out: 'platform.min.js'
+		shim: shim
+	).pipe gulp.dest('./dist/')
+	# pipe it to the output DIR 
+	return
 
 
 gulp.task 'compile-js', ['clean'], ->
@@ -61,11 +57,7 @@ gulp.task 'compile-js', ['clean'], ->
 gulp.task 'serve', ['rjs','compile-js'], ->
 
   browserSync server: baseDir: 'dist'
-  gulp.watch [
-    '*.html'
-    'dist/**/*.css'
-    'dist/**/*.js'
-  ], { cwd: 'dist' }, reload
+ 
 
 gulp.task 'default', ['clean','rjs','compile-js','serve']
   
