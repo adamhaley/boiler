@@ -2,17 +2,23 @@ var webpack = require('webpack');
 
 module.exports = {
 	context: __dirname + '/src',
-	entry: './index.js',
+	entry: './components/Main.js',
 	output: {
 		path: __dirname + '/src',
 		filename: 'bundle.js'
 	},
 	module: {
 		loaders: [
-			{test: /\.js$/, loader: 'babel', exclude: /node_modules/},
-			{test: /\.html$/, loader: 'raw'},
-			{test: /\.css$/, loader: 'style!css'},
-			{test: /\.styl$/, loader: 'style!css!stylus'},
+			{
+				test: /\.jsx?$/, 
+				loader: 'babel', 
+				exclude: /node_modules/, 
+				query: {
+					presets:['react','es2015']
+				}
+			},
+			{test: /\.css$/, loader: 'style!css', exclude: /node_modules/},
+			{test: /\.styl$/, loader: 'style!css!stylus', exclude: /node_modules/},
 		]
 	},
 	plugins: [
